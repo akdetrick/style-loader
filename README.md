@@ -206,11 +206,12 @@ This setting is primarily used as a workaround for [css clashes](https://github.
 ### `attrs`
 
 If defined, style-loader will attach given attributes with their values on `<style>` / `<link>` element.
+See [loader-utils's documentation](https://github.com/webpack/loader-utils#interpolatename) for more information on options.
 
 **component.js**
 
 ```js
-import style from './file.css';
+import style from './stylesheet1.css';
 ```
 
 **webpack.config.js**
@@ -219,14 +220,14 @@ import style from './file.css';
 {
   test: /\.css$/,
   use: [
-    { loader: 'style-loader', options: { attrs: { id: 'id' } } }
+    { loader: 'style-loader', options: { attrs: { 'data-resource': '[name]' } } }
     { loader: 'css-loader' }
   ]
 }
 ```
 
 ```html
-<style id="id"></style>
+<style data-resource="stylesheet1"></style>
 ```
 
 #### `Url`

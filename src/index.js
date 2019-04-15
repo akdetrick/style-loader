@@ -29,6 +29,21 @@ module.exports.pitch = function loader(request) {
     insertInto = `"${options.insertInto}"`;
   }
 
+  let interpolatedAttrs;
+  if (typeof options.attrs === 'object') {
+    interpolatedAttrs = { ...options.attrs };
+
+    Object.keys(options.attrs).forEach((k) => {
+      if (k !== 'type') {
+        interpolatedAttrs[k] = loaderUtils.interpolateName(
+          this,
+          options.attrs[k],
+          { context: this.rootContext || this.options.context }
+        );
+      }
+    });
+  }
+
   const hmr = [
     // Hot Module Replacement,
     'if(module.hot) {',
@@ -95,6 +110,7 @@ module.exports.pitch = function loader(request) {
     '',
     'options.transform = transform',
     `options.insertInto = ${insertInto};`,
+    `options.attrs = ${JSON.stringify(interpolatedAttrs)};`,
     '',
     // Add styles to the DOM
     `var update = require(${loaderUtils.stringifyRequest(

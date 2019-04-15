@@ -265,6 +265,24 @@ describe('basic tests', () => {
     runCompilerTest(expected, done);
   });
 
+  it('attrs with loader-utils placeholder', (done) => {
+    // Setup
+    styleLoaderOptions.attrs = { 'data-resource': '[name]' };
+
+    fs.writeFileSync(
+      `${rootDir}main.js`,
+      ["var a = require('./style.css');"].join('\n')
+    );
+
+    // Run
+    const expected = [
+      existingStyle,
+      `<style data-resource="style" type="text/css">${requiredCss}</style>`,
+    ].join('\n');
+
+    runCompilerTest(expected, done);
+  });
+
   it('nonce', (done) => {
     // Setup
     const expectedNonce = 'testNonce';
